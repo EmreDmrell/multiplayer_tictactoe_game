@@ -18,6 +18,9 @@ const MONGODB_URI = process.env.MONGODB_URI;
 // socket.io connection
 io.on("connection", (socket) => {
   console.log("New client connected");
+  socket.on("createRoom", ({ nickname }) => {
+    console.log(nickname);
+  });
 });
 
 // connect to mongodb

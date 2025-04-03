@@ -13,7 +13,7 @@ class SocketClient {
     socket!.connect();
   }
 
-  static SocketClient getInstance() {
+  static SocketClient get instance {
     _instance ??= SocketClient._internal();
     return _instance!;
   }
