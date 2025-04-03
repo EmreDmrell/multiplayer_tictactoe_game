@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tictactoe/routes.dart';
+import 'package:tictactoe/screens/main_menu_screen.dart';
 import 'package:tictactoe/utils/colors.dart';
 
 void main() {
@@ -13,7 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: bgColor),
-      home: const Scaffold(body: Center()),
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: (settings) => generateRoute(settings),
+      home: MainMenuScreen(),
     );
   }
 }
