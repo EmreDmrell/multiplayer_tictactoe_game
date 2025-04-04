@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tictactoe/provider/room_data_provider.dart';
 import 'package:tictactoe/routes.dart';
 import 'package:tictactoe/screens/main_menu_screen.dart';
 import 'package:tictactoe/utils/colors.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => RoomDataProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

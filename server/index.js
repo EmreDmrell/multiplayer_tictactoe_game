@@ -8,6 +8,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 var server = http.createServer(app);
 const Room = require("./models/room");
+const { SocketAddress } = require("net");
 var io = require("socket.io")(server);
 
 // middleware
@@ -99,6 +100,7 @@ io.on("connection", (socket) => {
 
   socket.on("winner", async ({ winnerSocketId, roomId }) => {
     try {
+      if (socket.id != winnerSocketId) return;
       let room = await Room.findById(roomId);
       let player = room.players.find(
         (w_player) => w_player.socketID == winnerSocketId

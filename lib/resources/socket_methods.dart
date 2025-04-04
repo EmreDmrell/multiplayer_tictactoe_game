@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:tictactoe/provider/room_data_provider.dart';
 import 'package:tictactoe/resources/game_methods.dart';
 import 'package:tictactoe/resources/socket_client.dart';
@@ -8,6 +9,8 @@ import 'package:tictactoe/utils/utils.dart';
 
 class SocketMethods {
   final _socketClient = SocketClient.instance.socket!;
+
+  Socket get sockentClient => _socketClient;
 
   //EMITS
 
@@ -23,9 +26,15 @@ class SocketMethods {
     }
   }
 
+  void tapped(int index, String roomId, List<String> displayElements) {
+    if (displayElements[index] == '') {
+      _socketClient.emit('tap', {'index': index, 'roomId': roomId});
+    }
+  }
+
   // LISTENERS
 
-  void createRoomSuccessListenere(BuildContext context) {
+  void createRoomSuccessListener(BuildContext context) {
     _socketClient.on('createRoomSuccess', (room) {
       Provider.of<RoomDataProvider>(
         context,
@@ -83,6 +92,20 @@ class SocketMethods {
       roomDataProvider.updateRoomData(data['room']);
       // Check winner
       GameMethods().checkWinner(context, _socketClient);
+    });
+  }
+
+  void pointIncreaseListener(BuildContext context) {
+    _socketClient.on('pointIncrease', (playerData) {
+      var roomDataProvider = Provider.of<RoomDataProvider>(
+        context,
+        listen: false,
+      );
+      if (playerData['socketID'] == roomDataProvider.player1.socketID) {
+        roomDataProvider.updatePlayer1(playerData);
+      } else {
+        roomDataProvider.updatePlayer2(playerData);
+      }
     });
   }
 
